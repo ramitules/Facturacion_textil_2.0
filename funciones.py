@@ -10,14 +10,18 @@ def volver():
 
 def cargar(clase: str):
     lista = []
-    try:
-        f = open(f'{clase}.pkl', 'rb')
-        while True:
-            try:
-                x = pickle.load(f)
-                lista.append(x)
-            except EOFError:
-                f.close()
-                break
-    except FileNotFoundError: pass
+
+    if f'{clase}.pkl' not in os.listdir():
+        return lista
+
+    f = open(f'{clase}.pkl', 'rb')
+    while True:
+        try:
+            x = pickle.load(f)
+            lista.append(x)
+
+        except EOFError:
+            f.close()
+            break
+
     return lista
