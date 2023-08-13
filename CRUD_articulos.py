@@ -12,33 +12,32 @@ class crud_articulos(interfaz_crud):
         self.articulos = []
 
         for x in self.binarios:
-            self.articulos.append([x.ID,
-                                   x.descripcion,
-                                   x.conteo,
-                                   x.precio_unitario])
+            self.articulos.append([
+                x.ID,
+                x.descripcion,
+                x.conteo,
+                x.precio_unitario])
 
         self.cargar_widgets()
 
     def cargar_widgets(self):
-        self.tabla = ttk.Treeview(self.fr_lista,
-                                  columns=('id',
-                                           'descripcion',
-                                           'conteo',
-                                           'p_u'),
-                                  show='headings')
+        self.tabla = ttk.Treeview(
+            self.fr_lista,
+            show='headings',
+            columns=(
+                'id',
+                'descripcion',
+                'conteo',
+                'p_u'))
 
-        self.tabla.column('id',
-                          width=40,
-                          anchor='center')
-        self.tabla.column('descripcion',
-                          width=350,
-                          anchor='center')
-        self.tabla.column('conteo',
-                          width=85,
-                          anchor='center')
-        self.tabla.column('p_u',
-                          width=85,
-                          anchor='center')
+        self.tabla.column(
+            'id', width=40, anchor='center')
+        self.tabla.column(
+            'descripcion', width=350, anchor='center')
+        self.tabla.column(
+            'conteo', width=85, anchor='center')
+        self.tabla.column(
+            'p_u', width=85, anchor='center')
 
         self.tabla.heading('id',
                            text='ID')
@@ -58,18 +57,22 @@ class crud_articulos(interfaz_crud):
         self.f_cancelar()
         super().f_crear()
 
-        self.l_descripcion = ttk.Label(self.fr_atributos,
-                                       text='Descripcion')
-        self.l_conteo = ttk.Label(self.fr_atributos,
-                                  text='Conteo')
-        self.l_p_u = ttk.Label(self.fr_atributos,
-                               text='Precio unitario')
+        self.l_descripcion = ttk.Label(
+            self.fr_atributos,
+            text='Descripcion')
+        self.l_conteo = ttk.Label(
+            self.fr_atributos,
+            text='Conteo')
+        self.l_p_u = ttk.Label(
+            self.fr_atributos,
+            text='Precio unitario')
 
         self.ent_descripcion = ttk.Entry(self.fr_atributos)
         self.ent_conteo = ttk.Entry(self.fr_atributos)
-        self.ent_precio = ttk.Entry(self.fr_atributos,
-                                    validate='key',
-                                    validatecommand=(self.register(self.decimales), '%S'))
+        self.ent_precio = ttk.Entry(
+            self.fr_atributos,
+            validate='key',
+            validatecommand=(self.register(self.decimales), '%S'))
 
         self.l_descripcion.place(x=10, y=50)
         self.ent_descripcion.place(x=10, y=70)
@@ -83,20 +86,21 @@ class crud_articulos(interfaz_crud):
         self.ent_descripcion.focus()
         
     def f_aceptar_crear(self):
-        nuevo_articulo = art(id=int(1),
-                             descripcion=self.ent_descripcion.get(),
-                             conteo=self.ent_conteo.get(),
-                             precio_unitario=self.ent_precio.get())
+        nuevo_articulo = art(
+            id=int(1),
+            descripcion=self.ent_descripcion.get(),
+            conteo=self.ent_conteo.get(),
+            precio_unitario=self.ent_precio.get())
 
         if self.ent_descripcion.get() == '':
-            return messagebox.showwarning('Error',
-                                            'La descripcion es obligatoria')
+            return messagebox.showwarning(
+                'Error', 'La descripcion es obligatoria')
 
         if len(self.articulos) != 0:
             for elemento in self.articulos:
                 if elemento[1] == self.ent_descripcion.get():
-                    return messagebox.showwarning('Error',
-                                                  f'El articulo "{elemento[1]}" ya existe.')
+                    return messagebox.showwarning(
+                        'Error', f'El articulo "{elemento[1]}" ya existe.')
             
                 nuevo_articulo.ID = elemento[0] + 1
 
@@ -104,17 +108,18 @@ class crud_articulos(interfaz_crud):
             pickle.dump(nuevo_articulo, f)
 
         self.binarios.append(nuevo_articulo)
-        self.articulos.append([nuevo_articulo.ID,
-                               nuevo_articulo.descripcion,
-                               nuevo_articulo.conteo,
-                               nuevo_articulo.precio_unitario])
+        self.articulos.append([
+            nuevo_articulo.ID,
+            nuevo_articulo.descripcion,
+            nuevo_articulo.conteo,
+            nuevo_articulo.precio_unitario])
 
         self.tabla.insert('', END, values=self.articulos[-1])
 
         self.f_cancelar()
 
-        return messagebox.showinfo('Exito',
-                                   'El articulo se ha creado con exito')
+        return messagebox.showinfo(
+            'Exito', 'El articulo se ha creado con exito')
 
     def f_modificar(self):
         self.f_cancelar()
@@ -123,8 +128,8 @@ class crud_articulos(interfaz_crud):
             item = self.tabla.selection()[0]
             valores = self.tabla.item(item, option='values')
         except IndexError:
-            return messagebox.showwarning('Error',
-                                          'Debe seleccionar un elemento')
+            return messagebox.showwarning(
+                'Error', 'Debe seleccionar un elemento')
 
         self.f_crear()
 
@@ -136,8 +141,8 @@ class crud_articulos(interfaz_crud):
 
     def f_aceptar_modificar(self, valores):
         if self.ent_descripcion.get() == '':
-            return messagebox.showwarning('Error',
-                                          'La descripcion es obligatoria')
+            return messagebox.showwarning(
+                'Error', 'La descripcion es obligatoria')
 
         for articulo in self.binarios:
             if int(valores[0]) == articulo.ID:
@@ -149,8 +154,8 @@ class crud_articulos(interfaz_crud):
             for articulo in self.binarios:
                 pickle.dump(articulo, f)
 
-        return messagebox.showinfo('Exito',
-                                   'El articulo se ha modificado con exito')
+        return messagebox.showinfo(
+            'Exito', 'El articulo se ha modificado con exito')
 
     def f_eliminar(self):
         self.f_cancelar()
@@ -159,11 +164,11 @@ class crud_articulos(interfaz_crud):
             item = self.tabla.selection()[0]
             valores = self.tabla.item(item, option='values')
         except IndexError:
-            return messagebox.showwarning('Error',
-                                          'Debe seleccionar un elemento')
+            return messagebox.showwarning(
+                'Error', 'Debe seleccionar un elemento')
 
-        if messagebox.askyesno('Eliminar',
-                               'Seguro que desea eliminar el articulo seleccionado?'):
+        if messagebox.askyesno(
+            'Eliminar', 'Seguro que desea eliminar el articulo seleccionado?'):
             for i, articulo in enumerate(self.binarios):
                 if articulo.ID == int(valores[0]):
                     self.binarios.pop(i)
@@ -175,7 +180,7 @@ class crud_articulos(interfaz_crud):
                 for articulo in self.binarios:
                     pickle.dump(articulo, f)
 
-            return messagebox.showinfo('Exito',
-                                       'El articulo se ha eliminado con exito')
+            return messagebox.showinfo(
+                'Exito', 'El articulo se ha eliminado con exito')
 
         else: return

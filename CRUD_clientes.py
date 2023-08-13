@@ -18,9 +18,10 @@ class crud_clientes(interfaz_crud):
         self.cargar_widgets()
 
     def cargar_widgets(self):
-        self.tabla = ttk.Treeview(self.fr_lista,
-                                  columns=('id', 'nombre'),
-                                  show='headings')
+        self.tabla = ttk.Treeview(
+            self.fr_lista,
+            columns=('id', 'nombre'),
+            show='headings')
 
         self.tabla.column('id', anchor='center', width=40)
         self.tabla.column('nombre', anchor='center', width=500)
@@ -46,18 +47,18 @@ class crud_clientes(interfaz_crud):
         self.ent_nombre.focus()
 
     def f_aceptar_crear(self):
-        nuevo_cliente = cli(id=int(1),
-                            nombre=self.ent_nombre.get())
+        nuevo_cliente = cli(
+            id=int(1), nombre=self.ent_nombre.get())
 
         if self.ent_nombre.get() == '':
-            return messagebox.showwarning('Error',
-                                            f'El nombre es obligatorio')
+            return messagebox.showwarning(
+                'Error', f'El nombre es obligatorio')
 
         if len(self.clientes) != 0:
             for elemento in self.clientes:
                 if elemento[1] == self.ent_nombre.get():
-                    return messagebox.showwarning('Error',
-                                                  f'El cliente "{elemento[1]}" ya existe.')
+                    return messagebox.showwarning(
+                        'Error', f'El cliente "{elemento[1]}" ya existe.')
                 nuevo_cliente.ID = elemento[0] + 1
 
         self.crear_directorios(self.ent_nombre.get())
@@ -70,8 +71,8 @@ class crud_clientes(interfaz_crud):
 
         self.f_cancelar()
 
-        return messagebox.showinfo('Exito',
-                                   'El cliente se ha creado con exito')
+        return messagebox.showinfo(
+            'Exito', 'El cliente se ha creado con exito')
 
     def f_modificar(self):
         self.f_cancelar()
@@ -91,12 +92,12 @@ class crud_clientes(interfaz_crud):
     def f_aceptar_modificar(self, valores):
         for cliente in self.clientes:
             if cliente[1] == self.ent_nombre.get():
-                return messagebox.showwarning('Error',
-                                              f'El cliente "{cliente[1]}" ya existe.')
+                return messagebox.showwarning(
+                    'Error', f'El cliente "{cliente[1]}" ya existe.')
 
         if self.ent_nombre.get() == '':
-            return messagebox.showwarning('Error',
-                                          'El nombre es obligatorio')
+            return messagebox.showwarning(
+                'Error', 'El nombre es obligatorio')
 
         for cliente in self.binarios:
             if int(valores[0]) == cliente.ID:
@@ -106,8 +107,8 @@ class crud_clientes(interfaz_crud):
             for cliente in self.binarios:
                 pickle.dump(cliente, f)
 
-        return messagebox.showinfo('Exito',
-                                   'El cliente se ha modificado con exito')
+        return messagebox.showinfo(
+            'Exito', 'El cliente se ha modificado con exito')
 
     def f_eliminar(self):
         self.f_cancelar()
@@ -118,8 +119,8 @@ class crud_clientes(interfaz_crud):
         except IndexError:
             return messagebox.showwarning('Error', 'Debe seleccionar un elemento')
 
-        if messagebox.askyesno('Eliminar',
-                               'Seguro que desea eliminar el cliente seleccionado?'):
+        if messagebox.askyesno(
+            'Eliminar', 'Seguro que desea eliminar el cliente seleccionado?'):
             for i, cliente in enumerate(self.binarios):
                 if cliente.ID == int(valores[0]):
                     self.binarios.pop(i)
@@ -131,8 +132,8 @@ class crud_clientes(interfaz_crud):
                 for cliente in self.binarios:
                     pickle.dump(cliente, f)
 
-            return messagebox.showinfo('Exito',
-                                       'El cliente se ha eliminado con exito')
+            return messagebox.showinfo(
+                'Exito', 'El cliente se ha eliminado con exito')
 
         else: return
 
@@ -145,11 +146,11 @@ class crud_clientes(interfaz_crud):
             os.mkdir(f'{nombre}\\Vista previa')
             os.mkdir(f'{nombre}\\Molderias')
             os.mkdir(f'{nombre}\\Tizadas')
-            messagebox.showinfo('Nuevos directorios',
-                                f'Se han creado las carpetas "Vista previa", "Molderias" y "Tizadas" para el nuevo cliente {nombre}')
+            messagebox.showinfo(
+                'Nuevos directorios', f'Se han creado las carpetas "Vista previa", "Molderias" y "Tizadas" para el nuevo cliente {nombre}')
 
         except FileExistsError: 
-            messagebox.showinfo('Existente',
-                                f'El cliente {nombre} ya tenia carpetas existentes. No se han creado nuevas carpetas')
+            messagebox.showinfo(
+                'Existente', f'El cliente {nombre} ya tenia carpetas existentes. No se han creado nuevas carpetas')
 
         volver()

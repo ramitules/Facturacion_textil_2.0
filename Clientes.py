@@ -1,7 +1,5 @@
 class cli:
-	def __init__(self,
-			  id: int,
-			  nombre: str):
+	def __init__(self, id: int, nombre: str):
 		self.ID = id
 		self.nombre = nombre
 
